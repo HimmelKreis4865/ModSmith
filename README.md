@@ -1,4 +1,4 @@
-# ![Icon](https://github.com/HimmelKreis4865/ModSmith/blob/main/icon.png?raw=true) Modsmith
+# Modsmith
 Modsmith is a PocketMine-MP plugin that simplifies customization with resource packs.
 This is useless as a standalone plugin but can be used by other plugins to create custom inventories and register blocks & items in one resource pack.
 

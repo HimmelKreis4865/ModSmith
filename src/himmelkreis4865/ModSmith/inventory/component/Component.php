@@ -37,7 +37,7 @@ abstract class Component implements JsonSerializable {
 		$this->properties[Properties::ANCHOR_FROM] = $this->anchor->from->value;
 		$this->properties[Properties::ANCHOR_TO] = $this->anchor->to->value;
 
-		if (is_iterable($this->properties[Properties::CONTROLS])) {
+		if (is_iterable($this->properties[Properties::CONTROLS] ?? null)) {
 			foreach ($this->properties[Properties::CONTROLS] as $control) {
 				if ($control instanceof Component) {
 					$control->build($inventory);

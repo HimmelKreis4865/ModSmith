@@ -17,7 +17,7 @@ class ProgressBarPlaceholder extends Item implements ItemComponents {
 	public function __construct(ItemIdentifier $identifier, string $name = "Unknown") {
 		parent::__construct($identifier, $name);
 		$this->addComponent(new MaxStackSizeComponent(1));
-		$this->initComponent($name, new CreativeInventoryInfo(CreativeInventoryInfo::CATEGORY_ITEMS));
+		$this->initComponent($name);
 	}
 
 	public function getMaxStackSize(): int { return 1; }

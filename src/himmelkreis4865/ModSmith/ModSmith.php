@@ -11,6 +11,7 @@ use himmelkreis4865\ModSmith\item\ItemAssetRegistry;
 use himmelkreis4865\ModSmith\item\ProgressBarPlaceholder;
 use himmelkreis4865\ModSmith\tasks\ResourcePackCreateTask;
 use himmelkreis4865\ModSmith\utils\FileRegistry;
+use himmelkreis4865\ModSmith\utils\LanguageRegistry;
 use himmelkreis4865\ModSmith\utils\Texture;
 use himmelkreis4865\ModSmith\utils\Utils;
 use pocketmine\item\Item;
@@ -86,6 +87,7 @@ final class ModSmith extends PluginBase {
 	private function loadResourcePack(): void {
 		if ($this->getConfig()->get("mode") === "production" && file_exists($this->resourcePackPath)) {
 			$this->registerResourcePack();
+			$this->getLogger()->info("Loaded existing resource pack without creating a new one");
 		} else {
 			$this->getLogger()->info("Creating resource pack...");
 			$files = [];
@@ -93,6 +95,7 @@ final class ModSmith extends PluginBase {
 				$files[$name] = $content;
 			}
 
+			LanguageRegistry::getInstance()->save();
 			foreach (FileRegistry::getInstance()->getFiles() as $path => $content) {
 				$files[$path] = $content;
 			}

@@ -59,7 +59,7 @@ final class CustomInventoryRegistry {
 			return null;
 		}
 		$index = array_search($name, array_keys($this->inventories), true);
-		return ($index ?: null);
+		return (($index === false) ? null : $index);
 	}
 
 	public function windowNameToStringId(string $name): ?string {
@@ -110,7 +110,7 @@ final class CustomInventoryRegistry {
 		];
 		$offset = 0;
 		foreach ($this->inventories as $inventory) {
-			$inventory->titleSuffix = $this->windowIdToString(++$offset);
+			$inventory->titleSuffix = $this->windowIdToString($offset++);
 			$variables[] = [
 				"requires" => "(not ((\$container_title_copy - '" . $inventory->titleSuffix . "') = \$container_title_copy))", //
 				"\$screen_content" => $inventory->name . ".base_screen_panel"
@@ -123,7 +123,6 @@ final class CustomInventoryRegistry {
 	}
 
 	public function windowIdToString(int $id): string {
-		//$id++; // starting at one, not at zero todo: is this needed?
 		return implode("", array_map(fn(string $char) => "§" . $char, str_split(dechex($id))));
 	}
 }

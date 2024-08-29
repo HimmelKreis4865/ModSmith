@@ -42,7 +42,7 @@ final class Texture implements JsonSerializable {
 		ob_start();
 		imagepng($image);
 		$contents = ob_get_contents();
-		ob_end_flush();
+		ob_end_clean();
 		if (!$contents) {
 			throw new RuntimeException("Failed to get output buffering contents");
 		}

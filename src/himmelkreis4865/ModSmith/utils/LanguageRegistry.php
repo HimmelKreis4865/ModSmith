@@ -97,9 +97,6 @@ final class LanguageRegistry {
 	}
 
 	public function save(): void {
-		if (empty($this->languageKeys)) {
-			return;
-		}
 		foreach ($this->languageKeys as $language => $translations) {
 			$file = "texts/$language.lang";
 			$content = "";

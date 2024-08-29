@@ -13,7 +13,7 @@ final class HoverBehaviour {
 		public ?Texture $backgroundTexture = null,
 		public float    $textureAlpha = 0.8,
 		public bool     $borderEnabled = true,
-		public Color    $borderColor = new Color(255, 255 ,255),
-		public bool     $hoverTextEnabled = true
+		public Color    $borderColor = new Color(255, 255 ,255), // fixme
+		public bool     $hoverTextEnabled = true // fixme
 	) {}
 }

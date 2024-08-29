@@ -5,7 +5,7 @@
     "type": "panel",
     "controls": [
       {
-        "highlight@common.highlight_slot": {
+        "highlight@core_components.highlight_slot": {
           "controls": [
             {
               "hover_text@common.hover_text": {
@@ -38,11 +38,8 @@
     "type": "panel",
     "size": ["100%", "100%"],
     "$highlight_border_visible|default": true,
+    "$content|default": "core_components.border_slot_img",
     "variables": [
-      {
-        "requires": "$highlight_border_visible",
-        "$content": "core_components.white_border_slot"
-      },
       {
         "requires": "not($highlight_border_visible)",
         "$content": "core_components.empty"
@@ -74,7 +71,7 @@
     "alpha": "$highlight_slot_alpha"
   },
 
-  "white_border_slot": {
+  "border_slot_img": {
     "type": "image",
     "$highlight_border_texture|default": "textures/ui/focus_border_white",
     "texture": "$highlight_border_texture",

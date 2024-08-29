@@ -28,7 +28,7 @@ class ButtonRef extends Component {
 	}
 
 	public function getParent(): ?string {
-		return "core_components.button";
-		//return "common.container_slot_button_prototype";
+		//return "core_components.button";
+		return "common.container_slot_button_prototype";
 	}
 }

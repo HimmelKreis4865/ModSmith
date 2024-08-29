@@ -1,0 +1,8 @@
+name: ModSmith
+author: HimmelKreis4865
+version: 1.0.0
+api: 5.0.0
+main: himmelkreis4865\ModSmith\ModSmith
+permissions:
+  libmods.command:
+    default: true

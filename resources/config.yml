@@ -1,0 +1,8 @@
+---
+# Mode
+# This might either be "dev" or "production"
+# During the dev-phase, the resource pack will be rebuilt on each startup if changes were made,
+# and you will have to download the pack again.
+# During production, the resource pack will not be rebuilt
+mode: dev
+...

@@ -1,0 +1,182 @@
+{
+  "namespace": "core_components",
+
+  "highlight_panel": {
+    "type": "panel",
+    "controls": [
+      {
+        "highlight@core_components.highlight_slot": {
+          "controls": [
+            {
+              "hover_text@common.hover_text": {
+                "layer": 29,
+                "$hover_text_binding_name|default": "#hover_text",
+                "bindings": [
+                  {
+                    "binding_name": "$hover_text_binding_name",
+                    "binding_name_override": "#hover_text",
+                    "binding_type": "collection",
+                    "binding_collection_name": "$item_collection_name"
+                  }
+                ]
+              }
+            },
+            {
+              "bundle_tooltip@common.bundle_tooltip": {
+                "layer": 29,
+                "$hover_text_binding_name|default": "#hover_text",
+                "bindings": [
+                  {
+                    "binding_name": "$hover_text_binding_name",
+                    "binding_name_override": "#hover_text",
+                    "binding_type": "collection",
+                    "binding_collection_name": "$item_collection_name"
+                  },
+                  {
+                    "binding_name": "#hover_items_id",
+                    "binding_name_override": "#hover_items_id",
+                    "binding_type": "collection",
+                    "binding_collection_name": "$item_collection_name"
+                  }
+                ]
+              }
+            }
+          ],
+          "bindings": [
+            {
+              "binding_name": "#show_persistent_bundle_hover_text",
+              "binding_name_override": "#visible"
+            }
+          ]
+        }
+      },
+      { "border_binding@core_components.border_binding": {} }
+    ]
+  },
+
+  "border_binding": {
+    "type": "panel",
+    "size": ["100%", "100%"],
+    "$highlight_border_visible|default": true,
+    "variables": [
+      {
+        "requires": "$highlight_border_visible",
+        "$content": "core_components.white_border_slot"
+      },
+      {
+        "requires": "not($highlight_border_visible)",
+        "$content": "core_components.empty"
+      }
+    ],
+    "controls": [
+      { "border@$content": {} }
+    ]
+  },
+
+  "empty": {
+    "type": "panel",
+    "size": [0, 0]
+  },
+
+  "highlight_slot": {
+    "type": "image",
+    "$highlight_slot_texture|default": "textures/ui/highlight_slot",
+    "$highlight_slot_alpha|default": 0.8,
+    "$actualSize": [ "100%", "100%" ],
+    "variables": [
+      {
+        "requires": "$highlight_border_visible",
+        "$actualSize": [ "100% - 2px", "100% - 2px" ]
+      }
+    ],
+    "texture": "$highlight_slot_texture",
+    "size": "$actualSize",
+    "alpha": "$highlight_slot_alpha"
+  },
+
+  "white_border_slot": {
+    "type": "image",
+    "$highlight_border_texture|default": "textures/ui/focus_border_white",
+    "texture": "$highlight_border_texture",
+    "size": [ "100%", "100%" ]
+  },
+
+  "close_button@common.close_button": {
+    "layer": 99,
+    "$close_texture|default": "textures/ui/close_button_default",
+    "$close_texture_hover|default": "textures/ui/close_button_hover",
+    "controls": [
+      {
+        "default@common.close_button_panel": {
+          "$close_button_texture": "$close_texture",
+          "$button_alpha": "$default_button_alpha"
+        }
+      },
+      {
+        "hover@common.close_button_panel": {
+          "$close_button_texture": "$close_texture_hover"
+        }
+      },
+      {
+        "pressed@common.close_button_panel": {
+          "$close_button_texture": "$close_texture_hover"
+        }
+      }
+    ]
+  },
+
+  "search_content@common.text_edit_box": {
+    "size": [ "100%", 24 ],
+
+    "$text_box_name": "portfolio_text_box",
+    "$text_edit_text_control": "search_portfolio",
+    "$place_holder_text": "Search..(Case sensitive)",
+
+    "$text_clear_button_enabled": true,
+    "$text_edit_box_clear_to_button_id": "button.search_bar_clear"
+  },
+
+  "button@common.container_slot_button_prototype": {
+    "size": [ "100% - 2px", "100% - 2px" ],
+    "property_bag": { "#default_search": "U" },
+
+    "bindings": [
+      {
+        "binding_type": "collection_details",
+        "binding_collection_name": "container_items"
+      },
+      {
+        "binding_name": "#form_button_text",
+        "binding_type": "collection",
+        "binding_collection_name": "container_items"
+      },
+      {
+        "binding_type": "view",
+        "source_control_name": "search_portfolio",
+        "source_property_name": "#item_name",
+        "target_property_name": "#search"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "#default_search",
+        "target_property_name": "#search",
+        "binding_condition": "once"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "(#search = '')",
+        "target_property_name": "#is_not_empty"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "(not ((#form_button_text - #search) = #form_button_text))",
+        "target_property_name": "#is_being_searched"
+      },
+      {
+        "binding_type": "view",
+        "source_property_name": "(#is_not_empty or #is_being_searched)",
+        "target_property_name": "#visible"
+      }
+    ]
+  }
+}

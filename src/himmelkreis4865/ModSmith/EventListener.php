@@ -12,6 +12,9 @@ use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerQuitEvent;
 use pocketmine\inventory\Inventory;
 use pocketmine\inventory\transaction\action\SlotChangeAction;
+use function debug_backtrace;
+use function var_dump;
+use const DEBUG_BACKTRACE_IGNORE_ARGS;
 
 final class EventListener implements Listener {
 
@@ -36,6 +39,7 @@ final class EventListener implements Listener {
 			/** @var CustomInventory $inventory */
 			if ($action instanceof SlotChangeAction and ($inventory = $action->getInventory()) instanceof CustomInventory) {
 				if ($inventory->receiveTransactionInternal($action, $transaction->getSource())) {
+					//var_dump("CANCEL", debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 10));
 					$event->cancel();
 				}
 			}

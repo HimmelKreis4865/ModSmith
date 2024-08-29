@@ -30,6 +30,7 @@ final class ResourcePackCreateTask extends AsyncTask {
 	}
 
 	public function onRun(): void {
+		$this->setResult(false);
 		$cacheString = "";
 		foreach ($this->files as $content) {
 			$cacheString .= md5($content);
@@ -52,11 +53,16 @@ final class ResourcePackCreateTask extends AsyncTask {
 		}
 		$zip->close();
 		file_put_contents($this->cachePath, $cacheString);
+		$this->setResult(true);
 	}
 
 	public function onCompletion(): void {
 		ModSmith::getInstance()->registerResourcePack();
-		ModSmith::getInstance()->getLogger()->info("Resource pack created successfully.");
+		if ($this->getResult()) {
+			ModSmith::getInstance()->getLogger()->info("Resource pack was created successfully.");
+		} else {
+			ModSmith::getInstance()->getLogger()->info("Resource pack was not rebuilt, either because of an error or because there were no changes. If you think your pack is outdated, try deleting packdata.cache in the plugin data");
+		}
 	}
 
 	/**

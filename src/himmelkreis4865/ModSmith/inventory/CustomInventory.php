@@ -22,6 +22,7 @@ use pocketmine\player\Player;
 use function array_map;
 use function array_values;
 use function preg_match;
+use function var_dump;
 
 abstract class CustomInventory extends SimpleInventory {
 
@@ -88,6 +89,7 @@ abstract class CustomInventory extends SimpleInventory {
 					if ($component->isLocked($action->getSlot())) {
 						return true;
 					}
+					break;
 				}
 				$slots += $component->getSize();
 			}

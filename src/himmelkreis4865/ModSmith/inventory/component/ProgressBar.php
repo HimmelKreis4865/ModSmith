@@ -20,6 +20,7 @@ use InvalidArgumentException;
 use pocketmine\item\Item;
 use RuntimeException;
 use function count;
+use function var_dump;
 
 class ProgressBar extends Component implements ItemContainer {
 
@@ -37,7 +38,8 @@ class ProgressBar extends Component implements ItemContainer {
 		?ItemTemplate $template = null,
 		?Dimension $offset = null,
 		?Dimension $size = null,
-		Anchor $anchor = new Anchor()) {
+		Anchor $anchor = new Anchor()
+	) {
 		parent::__construct($offset, $size, $anchor);
 		$this->itemTemplate = $template ?? new ItemTemplate(
 			Texture::fromFile(ModSmith::getInstance()->getResourceFolder() . "transparent.png", "textures/ui/transparent.png"),

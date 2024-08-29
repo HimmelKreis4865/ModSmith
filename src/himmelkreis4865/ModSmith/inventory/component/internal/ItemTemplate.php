@@ -19,7 +19,7 @@ final class ItemTemplate extends Component {
 
 	public function __construct(
 		public ?Texture $backgroundImage = null,
-		public ?HoverBehaviour $hoverBehaviour = null,
+		public ?HoverBehaviour $hoverBehaviour = null, // fixme:  this is not working right now
 		public ?Dimension $itemRendererSize = null,
 		public bool $locked = false,
 		?Dimension $offset = null,

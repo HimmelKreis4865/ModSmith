@@ -37,25 +37,9 @@ class Slot extends Component implements ItemContainer {
 		$this->properties[Properties::TYPE] = "stack_panel";
 		$this->properties[Properties::COLLECTION_NAME] = $this->collectionName->value;
 		$this->properties[Properties::ORIENTATION] = "horizontal";
-		/*$this->properties[Properties::BINDINGS] = [
-			[
-				"binding_name" => "\$hover_text_binding_name",
-				"binding_name_override" => "#hover_text",
-				"binding_type" => "collection",
-				"binding_collection_name" => $this->collectionName->value
-			]
-		];*/
 		$this->properties[Properties::CONTROLS] = [
-			$this->itemTemplate->encodeTemplate($inventory, $this->index, $this),
-			/*[
-				"text" => [
-					"type" => "label",
-					"text" => "\$text",
-					"color" => [0, 0, 0]
-				]
-			]*/
+			$this->itemTemplate->encodeTemplate($inventory, $this->index, $this)
 		];
-
 	}
 
 	protected function getIdentifier(): string {

@@ -33,11 +33,17 @@ final class Texture implements JsonSerializable {
 		return new Texture(str_replace(".png", "", $packTexturePath));
 	}
 
+	/**
+	 * @param string $packTexturePath with the extension (.png)
+	 */
 	public static function fromContents(string $packTexturePath, string $contents): Texture {
 		FileRegistry::getInstance()->addFile($packTexturePath, $contents);
 		return new Texture(str_replace(".png", "", $packTexturePath));
 	}
 
+	/**
+	 * @param string $packTexturePath with the extension (.png)
+	 */
 	public static function fromImage(string $packTexturePath, GdImage $image): Texture {
 		ob_start();
 		imagepng($image);

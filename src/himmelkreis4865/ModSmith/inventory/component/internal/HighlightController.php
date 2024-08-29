@@ -43,8 +43,8 @@ class HighlightController extends Component {
 	}
 
 	public function build(CustomInventory $inventory): void {
-		if ($this->behaviour->texture !== null) {
-			$this->properties[Properties::HIGHLIGHT_TEXTURE] = $this->behaviour->texture;
+		if ($this->behaviour->backgroundTexture !== null) {
+			$this->properties[Properties::HIGHLIGHT_TEXTURE] = $this->behaviour->backgroundTexture;
 		}
 		$this->properties[Properties::HIGHLIGHT_TEXTURE_ALPHA] = $this->behaviour->textureAlpha;
 

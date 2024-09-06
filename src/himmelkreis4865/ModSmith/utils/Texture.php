@@ -9,7 +9,7 @@ use JsonSerializable;
 use RuntimeException;
 use function file_get_contents;
 use function imagepng;
-use function ob_end_flush;
+use function ob_end_clean;
 use function ob_get_contents;
 use function ob_start;
 use function str_replace;

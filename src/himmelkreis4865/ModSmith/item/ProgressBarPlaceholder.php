@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace himmelkreis4865\ModSmith\item;
 
 use customiesdevs\customies\item\component\MaxStackSizeComponent;
-use customiesdevs\customies\item\CreativeInventoryInfo;
 use customiesdevs\customies\item\ItemComponents;
 use customiesdevs\customies\item\ItemComponentsTrait;
 use pocketmine\item\Item;

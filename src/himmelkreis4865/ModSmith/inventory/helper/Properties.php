@@ -74,4 +74,8 @@ final class Properties {
 	public const HOVER_TEXT_BINDING = "\$hover_text_binding_name";
 
 	public const ENABLED = "enabled";
+
+	public const LAYER = "layer";
+
+	public const SCROLLING_CONTENT = "\$scrolling_content";
 }

@@ -20,7 +20,6 @@ use InvalidArgumentException;
 use pocketmine\item\Item;
 use RuntimeException;
 use function count;
-use function var_dump;
 
 class ProgressBar extends Component implements ItemContainer {
 
@@ -29,7 +28,8 @@ class ProgressBar extends Component implements ItemContainer {
 	private ItemTemplate $itemTemplate;
 
 	/**
-	 * @param Item[] $items
+	 * @param Item[]                   $items
+	 * @param array<string, Component> $children
 	 */
 	public function __construct(
 		public array $items,
@@ -38,9 +38,12 @@ class ProgressBar extends Component implements ItemContainer {
 		?ItemTemplate $template = null,
 		?Dimension $offset = null,
 		?Dimension $size = null,
-		Anchor $anchor = new Anchor()
+		Anchor $anchor = new Anchor(),
+		array $children = [],
+		?int $layer = null,
+		?string $name = null
 	) {
-		parent::__construct($offset, $size, $anchor);
+		parent::__construct($offset, $size, $anchor, $children, $layer, $name);
 		$this->itemTemplate = $template ?? new ItemTemplate(
 			Texture::fromFile(ModSmith::getInstance()->getResourceFolder() . "transparent.png", "textures/ui/transparent.png"),
 			new HoverBehaviour(
@@ -61,8 +64,7 @@ class ProgressBar extends Component implements ItemContainer {
 		return true;
 	}
 
-	public function build(CustomInventory $inventory): void {
-		parent::build($inventory);
+	public function build(): void {
 		self::$externalComponents[] = $slot = new Slot($this->itemSlot, $this->itemTemplate, CollectionName::CONTAINER_ITEMS, $this->offset, $this->anchor);
 
 		$this->properties[Properties::TYPE] = "panel";
@@ -71,7 +73,8 @@ class ProgressBar extends Component implements ItemContainer {
 				$slot->getName() . "@" . (new ObjectLink($slot->getName()))->__toString() => []
 			]
 		];
-		$this->notifyStateUpdate();
+		// $this->notifyStateUpdate(); todo: is this needed?
+		parent::build();
 	}
 
 	public function loadForInventory(CustomInventory $inventory): void {

@@ -6,7 +6,6 @@ namespace himmelkreis4865\ModSmith\inventory\component;
 
 use himmelkreis4865\ModSmith\inventory\component\internal\ItemContainer;
 use himmelkreis4865\ModSmith\inventory\component\internal\ItemTemplate;
-use himmelkreis4865\ModSmith\inventory\CustomInventory;
 use himmelkreis4865\ModSmith\inventory\helper\Anchor;
 use himmelkreis4865\ModSmith\inventory\helper\Dimension;
 use himmelkreis4865\ModSmith\inventory\helper\ObjectLink;
@@ -14,9 +13,9 @@ use himmelkreis4865\ModSmith\inventory\helper\Properties;
 use himmelkreis4865\ModSmith\inventory\types\CollectionName;
 
 class Grid extends Component implements ItemContainer {
-
 	/**
-	 * @param Dimension $gridDimensions The grid dimensions (x, y)
+	 * @param Dimension                $gridDimensions The grid dimensions (x, y)
+	 * @param array<string, Component> $children
 	 */
 	public function __construct(
 		public Dimension $gridDimensions,
@@ -25,8 +24,18 @@ class Grid extends Component implements ItemContainer {
 		Dimension $size = null,
 		Dimension $offset = null,
 		Anchor $anchor = new Anchor(),
+		array $children = [],
+		?int $layer = null,
+		?string $name = null
 	) {
-		parent::__construct($offset, $size ?? new Dimension($this->gridDimensions->x * ($this->itemTemplate->size->x ?? 18), $this->gridDimensions->y * ($this->itemTemplate->size->y ?? 18)), $anchor);
+		parent::__construct(
+			$offset,
+			$size ?? new Dimension($this->gridDimensions->x * ($this->itemTemplate->size->x ?? 18), $this->gridDimensions->y * ($this->itemTemplate->size->y ?? 18)),
+			$anchor,
+			$children,
+			$layer,
+			$name
+		);
 	}
 
 	public function isLocked(int $slot): bool {
@@ -37,8 +46,7 @@ class Grid extends Component implements ItemContainer {
 		return $this->gridDimensions->x * $this->gridDimensions->y;
 	}
 
-	public function build(CustomInventory $inventory): void {
-		parent::build($inventory);
+	public function build(): void {
 		$this->properties[Properties::GRID_DIMENSIONS] = $this->gridDimensions;
 		$this->properties[Properties::ITEM_COLLECTION_NAME] = $this->collection->value;
 		$this->properties[Properties::MAXIMUM_GRID_ITEMS] = $this->gridDimensions->x * $this->gridDimensions->y;
@@ -47,6 +55,7 @@ class Grid extends Component implements ItemContainer {
 			$this->properties[Properties::GRID_ITEM_TEMPLATE] = new ObjectLink($this->itemTemplate->getName());
 			Component::$externalComponents[] = $this->itemTemplate;
 		}
+		parent::build();
 	}
 
 	public function getIdentifier(): string {

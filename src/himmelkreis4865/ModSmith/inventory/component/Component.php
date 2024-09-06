@@ -9,7 +9,6 @@ use himmelkreis4865\ModSmith\inventory\helper\Anchor;
 use himmelkreis4865\ModSmith\inventory\helper\Dimension;
 use himmelkreis4865\ModSmith\inventory\helper\Properties;
 use JsonSerializable;
-use function is_iterable;
 
 abstract class Component implements JsonSerializable {
 
@@ -18,31 +17,43 @@ abstract class Component implements JsonSerializable {
 	/** @var Component[] $externalComponents */
 	public static array $externalComponents = [];
 
-	private string $name;
+	public readonly string $name;
 
 	/** @var array<string, mixed> $properties */
 	public array $properties = [];
 
+	/**
+	 * @param array<string, Component> $children
+	 */
 	public function __construct(
-		public ?Dimension $offset = null,
-		public ?Dimension $size = null,
-		public Anchor $anchor = new Anchor()
+		public readonly ?Dimension $offset = null,
+		public readonly ?Dimension $size = null,
+		public readonly Anchor $anchor = new Anchor(),
+		public array $children = [],
+		public ?int $layer = null,
+		?string $name = null
 	) {
-		$this->name = $this->getIdentifier() . "_" . (self::$identifiers++);
+		$this->name = $name ?? ($this->getIdentifier() . "_" . (self::$identifiers++));
 	}
 
-	public function build(CustomInventory $inventory): void {
+	public function build(): void {
 		if ($this->offset !== null) $this->properties[Properties::OFFSET] = $this->offset;
 		if ($this->size !== null) $this->properties[Properties::SIZE] = $this->size;
+		if ($this->layer !== null && $this->layer > 0) $this->properties[Properties::LAYER] = $this->layer;
+
 		$this->properties[Properties::ANCHOR_FROM] = $this->anchor->from->value;
 		$this->properties[Properties::ANCHOR_TO] = $this->anchor->to->value;
-
-		if (is_iterable($this->properties[Properties::CONTROLS] ?? null)) {
-			foreach ($this->properties[Properties::CONTROLS] as $control) {
+		$controls = [];
+		if ($this->children) {
+			foreach ($this->children as $k => $control) {
 				if ($control instanceof Component) {
-					$control->build($inventory);
+					$control->build();
+					$controls[$control->getHeader()] = $control;
+					continue;
 				}
+				$controls[$k] = $control;
 			}
+			$this->properties[Properties::CONTROLS] = $controls;
 		}
 	}
 

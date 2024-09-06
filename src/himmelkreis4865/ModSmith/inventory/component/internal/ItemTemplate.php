@@ -6,7 +6,6 @@ namespace himmelkreis4865\ModSmith\inventory\component\internal;
 
 use himmelkreis4865\ModSmith\inventory\component\Component;
 use himmelkreis4865\ModSmith\inventory\component\Image;
-use himmelkreis4865\ModSmith\inventory\CustomInventory;
 use himmelkreis4865\ModSmith\inventory\helper\Anchor;
 use himmelkreis4865\ModSmith\inventory\helper\Dimension;
 use himmelkreis4865\ModSmith\inventory\helper\HoverBehaviour;
@@ -33,7 +32,7 @@ final class ItemTemplate extends Component {
 		throw new RuntimeException("Cannot serialize the raw item template. Use a Slot/Grid instead.");
 	}
 
-	public function build(CustomInventory $inventory): void {
+	public function build(): void {
 		if ($this->backgroundImage !== null) {
 			Component::$externalComponents[] = $img = new Image($this->backgroundImage);
 			$this->properties[Properties::BACKGROUND_IMAGES] = new ObjectLink($img->getName());
@@ -50,15 +49,15 @@ final class ItemTemplate extends Component {
 			$this->properties[Properties::ITEM_RENDERER_SIZE] = $this->itemRendererSize;
 		}
 		$this->properties[Properties::ITEM_CELL_SIZE] = $this->size ?? new Dimension(18, 18); // add nullable operator for preventing warnings, size is never null here
-		parent::build($inventory);
+		parent::build();
 	}
 
 	/**
 	 * @return array<string, array<string, mixed>>
 	 */
-	public function encodeTemplate(CustomInventory $inventory, int $index, Component $parent): array {
+	public function encodeTemplate(int $index, Component $parent): array {
 		$this->properties[Properties::COLLECTION_INDEX] = $index;
-		$this->build($inventory);
+		$this->build();
 		return [ $index . "@chest.chest_grid_item" => $this->properties];
 	}
 

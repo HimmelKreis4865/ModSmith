@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace himmelkreis4865\ModSmith\inventory\component;
 
-use himmelkreis4865\ModSmith\inventory\CustomInventory;
 use himmelkreis4865\ModSmith\inventory\helper\Anchor;
 use himmelkreis4865\ModSmith\inventory\helper\Dimension;
 use RuntimeException;
@@ -23,8 +22,8 @@ class SearchBar extends Component {
 		parent::__construct($offset, $size, $anchor);
 	}
 
-	public function build(CustomInventory $inventory): void {
-		parent::build($inventory);
+	public function build(): void {
+		parent::build();
 	}
 
 	public function getIdentifier(): string {

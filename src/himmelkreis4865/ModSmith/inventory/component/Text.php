@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace himmelkreis4865\ModSmith\inventory\component;
 
-use himmelkreis4865\ModSmith\inventory\CustomInventory;
 use himmelkreis4865\ModSmith\inventory\helper\Anchor;
 use himmelkreis4865\ModSmith\inventory\helper\Dimension;
 use himmelkreis4865\ModSmith\inventory\helper\Properties;
@@ -16,6 +15,9 @@ class Text extends Component {
 
 	private const RGB_MAX_VALUE = 255;
 
+	/**
+	 * @param array<string, Component> $children
+	 */
 	public function __construct(
 		public string $text,
 		public Color $color = new Color(0, 0, 0),
@@ -25,12 +27,14 @@ class Text extends Component {
 		?Dimension $offset = null,
 		?Dimension $size = null,
 		Anchor $anchor = new Anchor(),
+		array $children = [],
+		?int $layer = null,
+		?string $name = null
 	) {
-		parent::__construct($offset, $size, $anchor);
+		parent::__construct($offset, $size, $anchor, $children, $layer, $name);
 	}
 
-	public function build(CustomInventory $inventory): void {
-		parent::build($inventory);
+	public function build(): void {
 		$this->properties[Properties::TEXT] = $this->text;
 		$this->properties[Properties::TYPE] = "label";
 		$this->properties[Properties::COLOR] = [
@@ -41,13 +45,15 @@ class Text extends Component {
 		$this->properties[Properties::FONT_SCALE_FACTOR] = $this->fontScale;
 		$this->properties[Properties::FONT_TYPE] = $this->font->value;
 		if ($this->localized) $this->properties[Properties::LOCALIZE] = $this->localized;
+		parent::build();
 	}
 
-	public static function chestTitle(string $text, Dimension $offset = null): Text {
+	public static function chestTitle(string $text, Dimension $offset = null, bool $localized = false): Text {
 		return new Text(
 			$text,
 			new Color(76, 76, 76),
-			offset: $offset ?? new Dimension(7, 6)
+			localized: $localized,
+			offset: $offset ?? new Dimension(7, 9)
 		);
 	}
 

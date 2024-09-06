@@ -14,24 +14,31 @@ use const JSON_PRETTY_PRINT;
 final class WindowBuilder {
 
 	/**
+	 * @param class-string<CustomInventory> $inventoryClass
 	 * @return array<string, mixed>
 	 */
-	public static function build(CustomInventory $inventory): array {
-		ObjectLink::setCurrentNamespace($inventory->name);
+	public static function build(string $inventoryClass): array {
+		$name = $inventoryClass::getName();
+		$root = $inventoryClass::build();
+
+		ObjectLink::setCurrentNamespace($name);
 		Component::$externalComponents = [];
 
 		$controls = [
-			[ "inventory_screen@" . $inventory->name . ".inventory_screen" => [] ],
+			[ "inventory_screen@" . $name . ".inventory_screen" => [] ],
 			[ "inventory_take_progress_icon_button@common.inventory_take_progress_icon_button" => [] ]
 		];
-		if ($inventory->structure->inventory) {
+		$panelHeightAddition = 0;
+		if ($root->structure->inventory) {
 			$controls[] = [ "inventory_panel_bottom_half_with_label@common.inventory_panel_bottom_half_with_label" => [] ];
+			$panelHeightAddition += 71; // todo: correct?
 		}
-		if ($inventory->structure->hotbar) {
+		if ($root->structure->hotbar) {
 			$controls[] = [ "hotbar_grid@common.hotbar_grid_template" => [] ];
+			$panelHeightAddition += 22; // todo: correct?
 		}
 		$baseComponents = [
-			"namespace" => $inventory->name,
+			"namespace" => $name,
 			"base_screen_panel" => [
 				"type" => "panel",
 				"controls" => [
@@ -42,11 +49,11 @@ final class WindowBuilder {
 					[ "selected_item_details_factory@common.selected_item_details_factory" => [] ],
 					[ "item_lock_notification_factory@common.item_lock_notification_factory" => [] ],
 					[ "root_panel@common.root_panel" => [
-						"size" => $inventory->windowSize,
+						"size" => $root->size->add(0, $panelHeightAddition), // add bottom half if enabled
 						"layer" => 1,
 						"controls" => [
 							[ "common_panel@common.common_panel" => [
-								"\$show_close_button" => ($inventory->structure->closeButton === null)
+								"\$show_close_button" => ($root->structure->closeButton === null)
 							] ],
 							[ "chest_panel" => [
 								"type" => "panel",
@@ -59,12 +66,12 @@ final class WindowBuilder {
 					] ]
 				]
 			],
-			"inventory_screen" => $inventory->encodeInventory()
+			"inventory_screen" => $root->encodeInventory()
 		];
 		while (Component::$externalComponents) {
 			$component = array_shift(Component::$externalComponents);
 			if ($component !== null) {
-				$component->build($inventory);
+				$component->build();
 				$baseComponents[$component->getHeader()] = $component->properties;
 			}
 		}

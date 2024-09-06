@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace himmelkreis4865\ModSmith\inventory\component\internal;
 
 use himmelkreis4865\ModSmith\inventory\component\Component;
-use himmelkreis4865\ModSmith\inventory\CustomInventory;
 use himmelkreis4865\ModSmith\inventory\helper\Anchor;
 use himmelkreis4865\ModSmith\inventory\helper\Dimension;
 use himmelkreis4865\ModSmith\inventory\helper\ObjectLink;
@@ -17,10 +16,10 @@ class ButtonRef extends Component {
 		parent::__construct($offset, $size, $anchor);
 	}
 
-	public function build(CustomInventory $inventory): void {
-		parent::build($inventory);
+	public function build(): void {
 		$this->properties[Properties::HIGHLIGHT_CONTROL] = $this->highlightController;
 		$this->properties[Properties::ENABLED] = !$this->readonly;
+		parent::build();
 	}
 
 	protected function getIdentifier(): string {

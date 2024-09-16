@@ -8,8 +8,12 @@ use BadMethodCallException;
 use himmelkreis4865\ModSmith\inventory\component\Component;
 use himmelkreis4865\ModSmith\inventory\component\internal\ItemContainer;
 use himmelkreis4865\ModSmith\inventory\entity\InventoryHolder;
+use himmelkreis4865\ModSmith\inventory\helper\ProgressBarStateCollection;
+use InvalidArgumentException;
 use pocketmine\inventory\SimpleInventory;
 use pocketmine\inventory\transaction\action\SlotChangeAction;
+use pocketmine\item\Item;
+use pocketmine\item\VanillaItems;
 use pocketmine\network\mcpe\protocol\ContainerOpenPacket;
 use pocketmine\network\mcpe\protocol\SetActorLinkPacket;
 use pocketmine\network\mcpe\protocol\types\BlockPosition;
@@ -17,6 +21,8 @@ use pocketmine\network\mcpe\protocol\types\entity\EntityLink;
 use pocketmine\network\mcpe\protocol\types\inventory\WindowTypes;
 use pocketmine\player\Player;
 use RuntimeException;
+use function array_keys;
+use function var_dump;
 
 abstract class CustomInventory extends SimpleInventory {
 
@@ -31,11 +37,20 @@ abstract class CustomInventory extends SimpleInventory {
 
 	public const BOTTOM_HALF_HEIGHT = 93;
 
+	/** @var Item[][] */
+	private array $progressBarCollections = [];
+
+	/** @var int[] */
+	private array $progressBarStates = [];
+
 	private int $slotSize = 0;
 
 	public function __construct() {
 		$this->setupInventory();
 		parent::__construct($this->slotSize);
+		foreach ($this->progressBarStates as $slot => $state) {
+			$this->setProgressBarState($slot, $state);
+		}
 	}
 
 	/**
@@ -73,6 +88,40 @@ abstract class CustomInventory extends SimpleInventory {
 				$this->recursiveInventorySetup($child);
 			}
 		}
+	}
+
+	public function registerProgressBarCollection(int $slot, string $collectionName, int $initialState): void {
+		$collection = ProgressBarStateCollection::getInstance()->get($collectionName);
+		if ($collection === null) {
+			throw new InvalidArgumentException("Progress Bar Collection $collectionName is not registered!");
+		}
+		$this->progressBarCollections[$slot] = $collection;
+		$this->progressBarStates[$slot] = $initialState;
+	}
+
+	public function getProgressBarState(int $slot): ?int {
+		if (!isset($this->progressBarCollections[$slot])) {
+			return null;
+		}
+		return $this->progressBarStates[$slot] ?? 0;
+	}
+
+	public function setProgressBarState(int $slot, int $state): void {
+		if (!isset($this->progressBarCollections[$slot])) {
+			throw new InvalidArgumentException("Slot $slot is not a progress bar!");
+		} else if ($state < 0 || count($this->progressBarCollections[$slot]) <= $state) {
+			throw new InvalidArgumentException("State index $state out of range");
+		}
+		$this->progressBarStates[$slot] = $state;
+		$this->setItem($slot, $item = $this->progressBarCollections[$slot][$state]);
+		var_dump("setting slot $slot to " . $item::class);
+	}
+
+	public function nextProgressBarState(int $slot): void {
+		if (!isset($this->progressBarCollections[$slot])) {
+			throw new InvalidArgumentException("Slot $slot is not a progress bar!");
+		}
+		$this->setProgressBarState($slot, $this->getProgressBarState($slot));
 	}
 
 	public function receiveTransactionInternal(SlotChangeAction $action, Player $player): bool {

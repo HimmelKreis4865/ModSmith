@@ -51,7 +51,7 @@ final class RootPanel {
 			"anchor_from" => AnchorType::TOP_LEFT->value,
 			"anchor_to" => AnchorType::TOP_LEFT->value,
 			"controls" => array_map(function(Component $component): array {
-				$component->build($this);
+				$component->build();
 				return [
 					$component->getHeader() => $component->properties
 				];

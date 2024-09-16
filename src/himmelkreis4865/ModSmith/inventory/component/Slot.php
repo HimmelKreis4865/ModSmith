@@ -25,7 +25,6 @@ class Slot extends Component implements ItemContainer {
 		?int $layer = null,
 		?string $name = null
 	) {
-		$children[] = $this->itemTemplate->encodeTemplate($this->index, $this);
 		parent::__construct($offset, $this->itemTemplate->size, $anchor, $children, $layer, $name);
 	}
 
@@ -38,6 +37,7 @@ class Slot extends Component implements ItemContainer {
 	}
 
 	public function build(): void {
+		$this->children[] = $this->itemTemplate->encodeTemplate($this->index, $this);
 		$this->properties[Properties::TYPE] = "stack_panel";
 		$this->properties[Properties::COLLECTION_NAME] = CollectionName::CONTAINER_ITEMS->value; // todo: should this be customizable again?
 		$this->properties[Properties::ORIENTATION] = "horizontal";

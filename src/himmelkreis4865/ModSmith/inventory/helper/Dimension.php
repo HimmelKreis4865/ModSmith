@@ -9,14 +9,14 @@ use function intval;
 
 final readonly class Dimension implements JsonSerializable {
 
-	public function __construct(public int $x, public int $y) {}
+	public function __construct(public float $x, public float $y) {}
 
-	public function add(int $x, int $y): Dimension {
+	public function add(float $x, float $y = 0): Dimension {
 		return new Dimension($this->x + $x, $this->y + $y);
 	}
 
 	public function multiply(float $x, float $y): Dimension {
-		return new Dimension(intval($this->x * $x), intval($this->y * $y));
+		return new Dimension($this->x * $x, $this->y * $y);
 	}
 
 	public function __toString(): string {

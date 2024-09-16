@@ -7,6 +7,7 @@ namespace himmelkreis4865\ModSmith\utils;
 use GdImage;
 use JsonSerializable;
 use RuntimeException;
+use function file_exists;
 use function file_get_contents;
 use function imagepng;
 use function ob_end_clean;
@@ -28,6 +29,10 @@ final class Texture implements JsonSerializable {
 	public static function fromFile(string $localPath, string $packTexturePath): Texture {
 		if (!($contents = file_get_contents($localPath))) {
 			throw new RuntimeException("File $localPath could not be found or opened!");
+		}
+		$ninesliceFile = str_replace(".png", ".json", $localPath);
+		if (file_exists($ninesliceFile) && ($ninesliceContent = file_get_contents($ninesliceFile))) {
+			FileRegistry::getInstance()->addFile(str_replace(".png", ".json", $packTexturePath), $ninesliceContent);
 		}
 		FileRegistry::getInstance()->addFile($packTexturePath, $contents);
 		return new Texture(str_replace(".png", "", $packTexturePath));

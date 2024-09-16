@@ -43,7 +43,7 @@ class Grid extends Component implements ItemContainer {
 	}
 
 	public function getSize(): int {
-		return $this->gridDimensions->x * $this->gridDimensions->y;
+		return intval($this->gridDimensions->x * $this->gridDimensions->y);
 	}
 
 	public function build(): void {

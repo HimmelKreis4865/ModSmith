@@ -5,7 +5,7 @@
     "type": "panel",
     "controls": [
       {
-        "highlight@core_components.highlight_slot": {
+        "highlight@common.highlight_slot": {
           "controls": [
             {
               "hover_text@common.hover_text": {

@@ -23,18 +23,15 @@ use function count;
 
 class ProgressBar extends Component implements ItemContainer {
 
-	private ?CustomInventory $assignedInventory = null;
-
 	private ItemTemplate $itemTemplate;
 
 	/**
-	 * @param Item[]                   $items
 	 * @param array<string, Component> $children
 	 */
 	public function __construct(
-		public array $items,
+		private readonly string $collectionName,
 		private readonly int $itemSlot,
-		private int $state = 0,
+		private readonly int $initialState = 0,
 		?ItemTemplate $template = null,
 		?Dimension $offset = null,
 		?Dimension $size = null,
@@ -52,7 +49,9 @@ class ProgressBar extends Component implements ItemContainer {
 				false,
 				hoverTextEnabled: false
 			),
-			locked: true
+			itemRendererSize: $this->size,
+			locked: true,
+			size: $this->size
 		);
 	}
 
@@ -65,7 +64,7 @@ class ProgressBar extends Component implements ItemContainer {
 	}
 
 	public function build(): void {
-		self::$externalComponents[] = $slot = new Slot($this->itemSlot, $this->itemTemplate, CollectionName::CONTAINER_ITEMS, $this->offset, $this->anchor);
+		self::$externalComponents[] = $slot = new Slot($this->itemSlot, $this->itemTemplate);
 
 		$this->properties[Properties::TYPE] = "panel";
 		$this->properties[Properties::CONTROLS] = [
@@ -78,35 +77,8 @@ class ProgressBar extends Component implements ItemContainer {
 	}
 
 	public function loadForInventory(CustomInventory $inventory): void {
-		if ($this->assignedInventory !== null) {
-			throw new RuntimeException("Failed to register a progress bar to two inventories");
-		}
-		$this->assignedInventory = $inventory;
+		$inventory->registerProgressBarCollection($this->itemSlot, $this->collectionName, $this->initialState);
 	}
-
-	public function setState(int $state): void {
-		$this->state = $state;
-		$this->validateState();
-		$this->notifyStateUpdate();
-	}
-
-	public function getState(): int {
-		return $this->state;
-	}
-
-	private function notifyStateUpdate(): void {
-		if ($this->assignedInventory === null) {
-			throw new BadMethodCallException("Progress Bar was not assigned to an inventory");
-		}
-		$this->assignedInventory->setItem($this->itemSlot, $this->items[$this->state]);
-	}
-
-	private function validateState(): void {
-		if ($this->state < 0 || count($this->items) <= $this->state) {
-			throw new InvalidArgumentException("Invalid state: " . $this->state . " encountered: Expected a value between 0-" . (count($this->items) - 1));
-		}
-	}
-
 	protected function getIdentifier(): string {
 		return "progress_bar";
 	}

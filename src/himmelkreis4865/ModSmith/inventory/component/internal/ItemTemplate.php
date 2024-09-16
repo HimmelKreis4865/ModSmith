@@ -42,7 +42,7 @@ final class ItemTemplate extends Component {
 			Component::$externalComponents[] = $buttonRef = new ButtonRef(new ObjectLink($hoverController->getName()), $this->locked);
 			$this->properties[Properties::BUTTON_REF] = new ObjectLink($buttonRef->getName());
 			if (!$this->hoverBehaviour->hoverTextEnabled) {
-				$this->properties[Properties::HOVER_TEXT_BINDING] = "core_components.empty";
+				//$this->properties[Properties::HOVER_TEXT_BINDING] = "core_components.empty";  // todo: what the fuck is this doing?
 			}
 		}
 		if ($this->itemRendererSize !== null) {

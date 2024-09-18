@@ -7,6 +7,7 @@ namespace himmelkreis4865\ModSmith\inventory;
 use BadMethodCallException;
 use himmelkreis4865\ModSmith\inventory\entity\InventoryHolder;
 use himmelkreis4865\ModSmith\inventory\helper\WindowBuilder;
+use himmelkreis4865\ModSmith\utils\UIDefs;
 use InvalidArgumentException;
 use JsonException;
 use JsonSerializable;
@@ -58,6 +59,7 @@ final class CustomInventoryRegistry {
 			throw new BadMethodCallException("Inventory $inventoryClass of type $inventoryName is already registered");
 		}
 		$this->inventories[$inventoryName] = $inventoryClass;
+		UIDefs::getInstance()->add("ui/custom/" . $inventoryName . ".json");
 	}
 
 	public function getIndexByName(string $name): ?int {
@@ -82,11 +84,6 @@ final class CustomInventoryRegistry {
 	 */
 	public function getFileContents(): array {
 		$files = [
-			"ui/_ui_defs.json" => json_encode([
-				"ui_defs" => [
-					...array_map(fn(string $inventoryName) => "ui/custom/" . $inventoryName . ".json", array_keys($this->inventories)),
-					"ui/core_components.json"
-				]], JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR),
 			"ui/chest_screen.json" => json_encode([
 				"namespace" => "chest",
 				"small_chest_screen@common.inventory_screen_common" => $this->chestScreenContent()

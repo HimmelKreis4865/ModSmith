@@ -79,7 +79,7 @@ final class WindowBuilder {
 						"layer" => 1,
 						"controls" => [
 							[ "common_panel@common.common_panel" => [
-								"\$show_close_button" => ($root->structure->closeButton === null)
+								"\$show_close_button" => ($root->closeButtonEnabled && $root->closeButtonOverwrite === null)
 							] ],
 							[ "chest_panel" => [
 								"type" => "panel",

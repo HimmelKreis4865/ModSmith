@@ -13,6 +13,7 @@ use himmelkreis4865\ModSmith\tasks\ResourcePackCreateTask;
 use himmelkreis4865\ModSmith\utils\FileRegistry;
 use himmelkreis4865\ModSmith\utils\LanguageRegistry;
 use himmelkreis4865\ModSmith\utils\Texture;
+use himmelkreis4865\ModSmith\utils\UIDefs;
 use himmelkreis4865\ModSmith\utils\Utils;
 use pocketmine\item\Item;
 use pocketmine\item\StringToItemParser;
@@ -26,6 +27,7 @@ use RuntimeException;
 use function basename;
 use function file_exists;
 use function imagecreatefrompng;
+use function json_encode;
 use function str_replace;
 
 final class ModSmith extends PluginBase {
@@ -94,6 +96,7 @@ final class ModSmith extends PluginBase {
 			foreach (CustomInventoryRegistry::getInstance()->getFileContents() as $name => $content) {
 				$files[$name] = $content;
 			}
+			$files["ui/_ui_defs.json"] = UIDefs::getInstance()->encode();
 
 			LanguageRegistry::getInstance()->save();
 			foreach (FileRegistry::getInstance()->getFiles() as $path => $content) {

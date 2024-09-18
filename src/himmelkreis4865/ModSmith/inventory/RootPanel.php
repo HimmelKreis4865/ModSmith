@@ -59,6 +59,7 @@ final class RootPanel {
 
 	public function setCloseButton(CloseButton $button): void {
 		$this->closeButtonOverwrite = $button;
+		$this->add($button);
 		$this->closeButtonEnabled = true;
 	}
 

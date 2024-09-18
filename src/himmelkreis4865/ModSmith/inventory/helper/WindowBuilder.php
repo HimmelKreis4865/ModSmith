@@ -7,10 +7,6 @@ namespace himmelkreis4865\ModSmith\inventory\helper;
 use himmelkreis4865\ModSmith\inventory\component\Component;
 use himmelkreis4865\ModSmith\inventory\CustomInventory;
 use function array_shift;
-use function json_encode;
-use function str_replace;
-use function var_dump;
-use const JSON_PRETTY_PRINT;
 
 final class WindowBuilder {
 
@@ -69,10 +65,6 @@ final class WindowBuilder {
 			]
 		];
 
-		/*if ($root->structure->hotbar) {
-			$controls[] = [ "hotbar_grid@common.hotbar_grid_template" => [] ];
-			$panelHeightAddition += 22; // todo: correct?
-		}*/
 		$baseComponents = [
 			"namespace" => $name,
 			"base_screen_panel" => [
@@ -102,7 +94,6 @@ final class WindowBuilder {
 			],
 			"inventory_screen" => $root->encodeInventory()
 		];
-		var_dump($inventoryClass . " - " . count(Component::$externalComponents));
 		while (Component::$externalComponents) {
 			$component = array_shift(Component::$externalComponents);
 			if ($component !== null) {

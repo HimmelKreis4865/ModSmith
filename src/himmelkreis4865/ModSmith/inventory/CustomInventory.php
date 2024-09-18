@@ -13,7 +13,6 @@ use InvalidArgumentException;
 use pocketmine\inventory\SimpleInventory;
 use pocketmine\inventory\transaction\action\SlotChangeAction;
 use pocketmine\item\Item;
-use pocketmine\item\VanillaItems;
 use pocketmine\network\mcpe\protocol\ContainerOpenPacket;
 use pocketmine\network\mcpe\protocol\SetActorLinkPacket;
 use pocketmine\network\mcpe\protocol\types\BlockPosition;
@@ -21,8 +20,6 @@ use pocketmine\network\mcpe\protocol\types\entity\EntityLink;
 use pocketmine\network\mcpe\protocol\types\inventory\WindowTypes;
 use pocketmine\player\Player;
 use RuntimeException;
-use function array_keys;
-use function var_dump;
 
 abstract class CustomInventory extends SimpleInventory {
 
@@ -114,7 +111,6 @@ abstract class CustomInventory extends SimpleInventory {
 		}
 		$this->progressBarStates[$slot] = $state;
 		$this->setItem($slot, $item = $this->progressBarCollections[$slot][$state]);
-		var_dump("setting slot $slot to " . $item::class);
 	}
 
 	public function nextProgressBarState(int $slot): void {

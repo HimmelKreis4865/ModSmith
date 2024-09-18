@@ -40,13 +40,10 @@ final class RootPanel {
 
 	public ?Text $playerInventoryLabel = null;
 
-	public InventoryStructure $structure;
 
 	public function __construct(
 		public readonly Dimension $size = new Dimension(CustomInventory::DEFAULT_WIDTH, CustomInventory::SMALL_CHEST_HEIGHT)
-	) {
-		$this->structure = new InventoryStructure();
-	}
+	) {}
 
 	public function add(Component $component): void {
 		$this->components[$component->getName()] = $component;

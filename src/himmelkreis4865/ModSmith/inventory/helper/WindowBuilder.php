@@ -30,23 +30,56 @@ final class WindowBuilder {
 			[ "inventory_take_progress_icon_button@common.inventory_take_progress_icon_button" => [] ]
 		];
 		$panelHeightAddition = 0;
-		if ($root->structure->inventory) {
-			$controls[] = [ "inventory_panel_bottom_half_with_label@common.inventory_panel_bottom_half_with_label" => [] ];
-			$panelHeightAddition += 71; // todo: correct?
+		$bottomHalfControls = [];
+
+		if ($root->inventoryEnabled) {
+			$panelHeightAddition += ($root->customInventoryGrid?->itemTemplate->size?->y ?? 18) * 3 + 18;
+			if ($root->customInventoryGrid !== null) {
+				$root->customInventoryGrid->build();
+				$bottomHalfControls[] = [ "inventory_panel@common.container_grid" => $root->customInventoryGrid ];
+			} else {
+				$bottomHalfControls[] = [ "inventory_panel@common.inventory_panel" => [] ];
+			}
 		}
-		if ($root->structure->hotbar) {
+
+		if ($root->inventoryLabelEnabled) {
+			if ($root->playerInventoryLabel !== null) {
+				$root->playerInventoryLabel->build();
+				$bottomHalfControls[] = [ "inventory_label" => $root->playerInventoryLabel ];
+			} else {
+				$defaultTitle = $root->getDefaultPlayerInventoryTitle();
+				$defaultTitle->build();
+				$bottomHalfControls[] = [ "label@section_heading_label" => $defaultTitle ];
+			}
+		}
+
+		if ($root->hotbarEnabled) {
+			$panelHeightAddition += ($root->customHotbarGrid?->itemTemplate->size?->y ?? 18) + 4;
+			if ($root->customHotbarGrid !== null) {
+				$root->customHotbarGrid->build();
+				$controls[] = [ "hotbar_grid@common.hotbar_grid_template" => $root->customHotbarGrid ];
+			} else {
+				$controls[] = [ "hotbar_grid@common.hotbar_grid_template" => [] ];
+			}
+		}
+
+		$controls[] = [
+			"custom_inventory_bottom_half@common.inventory_panel_bottom_half_with_label" => [
+				"controls" => $bottomHalfControls
+			]
+		];
+
+		/*if ($root->structure->hotbar) {
 			$controls[] = [ "hotbar_grid@common.hotbar_grid_template" => [] ];
 			$panelHeightAddition += 22; // todo: correct?
-		}
+		}*/
 		$baseComponents = [
 			"namespace" => $name,
 			"base_screen_panel" => [
 				"type" => "panel",
 				"controls" => [
 					[ "container_gamepad_helpers@common.container_gamepad_helpers" => [] ],
-					[ "flying_item_renderer@common.flying_item_renderer" => [
-						"layer" => 14
-					] ],
+					[ "flying_item_renderer@common.flying_item_renderer" => [ "layer" => 14 ] ],
 					[ "selected_item_details_factory@common.selected_item_details_factory" => [] ],
 					[ "item_lock_notification_factory@common.item_lock_notification_factory" => [] ],
 					[ "root_panel@common.root_panel" => [
@@ -79,18 +112,4 @@ final class WindowBuilder {
 		}
 		return $baseComponents;
 	}
-
-	/*
-	 * @param string $identifier
-	 * @param Component[] $components
-	 * @return void
-	 *
-	public static function build(string $identifier, array $components): string {
-		$file = ["namespace" => $identifier];
-
-		foreach ($components as $component) {
-			$file[$component->getHeader()] = $component;
-		}
-		return str_replace(["%NAMESPACE%"], [$identifier], json_encode($file, JSON_PRETTY_PRINT));
-	}*/
 }

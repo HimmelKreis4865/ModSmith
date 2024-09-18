@@ -20,7 +20,7 @@ class Text extends Component {
 	 */
 	public function __construct(
 		public string $text,
-		public Color $color = new Color(0, 0, 0),
+		public Color $color = new Color(76, 76, 76),
 		public float $fontScale = 1.0,
 		public Font $font = Font::DEFAULT,
 		public bool $localized = false,
@@ -37,11 +37,13 @@ class Text extends Component {
 	public function build(): void {
 		$this->properties[Properties::TEXT] = $this->text;
 		$this->properties[Properties::TYPE] = "label";
-		$this->properties[Properties::COLOR] = [
-			round($this->color->getR() / self::RGB_MAX_VALUE, 3),
-			round($this->color->getG() / self::RGB_MAX_VALUE, 3),
-			round($this->color->getB() / self::RGB_MAX_VALUE, 3)
-		];
+		if ($this->color !== null) {
+			$this->properties[Properties::COLOR] = [
+				round($this->color->getR() / self::RGB_MAX_VALUE, 3),
+				round($this->color->getG() / self::RGB_MAX_VALUE, 3),
+				round($this->color->getB() / self::RGB_MAX_VALUE, 3)
+			];
+		}
 		$this->properties[Properties::FONT_SCALE_FACTOR] = $this->fontScale;
 		$this->properties[Properties::FONT_TYPE] = $this->font->value;
 		if ($this->localized) $this->properties[Properties::LOCALIZE] = $this->localized;

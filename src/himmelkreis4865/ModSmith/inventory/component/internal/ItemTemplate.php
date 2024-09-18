@@ -11,6 +11,7 @@ use himmelkreis4865\ModSmith\inventory\helper\Dimension;
 use himmelkreis4865\ModSmith\inventory\helper\HoverBehaviour;
 use himmelkreis4865\ModSmith\inventory\helper\ObjectLink;
 use himmelkreis4865\ModSmith\inventory\helper\Properties;
+use himmelkreis4865\ModSmith\inventory\types\CollectionName;
 use himmelkreis4865\ModSmith\utils\Texture;
 use RuntimeException;
 
@@ -23,7 +24,8 @@ final class ItemTemplate extends Component {
 		public bool $locked = false,
 		?Dimension $offset = null,
 		?Dimension $size = null,
-		Anchor $anchor = new Anchor()
+		Anchor $anchor = new Anchor(),
+		public CollectionName $collectionName = CollectionName::CONTAINER_ITEMS
 	) {
 		parent::__construct($offset, $size ?? new Dimension(18, 18), $anchor);
 	}

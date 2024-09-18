@@ -26,9 +26,9 @@ abstract class Component implements JsonSerializable {
 	 * @param array<string, Component> $children
 	 */
 	public function __construct(
-		public readonly ?Dimension $offset = null,
-		public readonly ?Dimension $size = null,
-		public readonly Anchor $anchor = new Anchor(),
+		public ?Dimension $offset = null,
+		public ?Dimension $size = null,
+		public Anchor $anchor = new Anchor(),
 		public array $children = [],
 		public ?int $layer = null,
 		?string $name = null

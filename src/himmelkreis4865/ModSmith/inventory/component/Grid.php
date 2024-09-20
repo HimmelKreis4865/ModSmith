@@ -48,7 +48,7 @@ class Grid extends Component implements ItemContainer {
 
 	public function build(): void {
 		$this->properties[Properties::GRID_DIMENSIONS] = $this->gridDimensions;
-		$this->properties[Properties::COLLECTION_NAME] = $this->collection->value;
+		$this->properties[Properties::ITEM_COLLECTION_NAME] = $this->collection->value;
 		$this->properties[Properties::MAXIMUM_GRID_ITEMS] = $this->gridDimensions->x * $this->gridDimensions->y;
 		$this->properties[Properties::BINDINGS] = [];
 		if ($this->itemTemplate !== null) {
